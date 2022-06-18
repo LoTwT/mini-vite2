@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "bin": {
+    "mini-vite": "bin/mini-vite"
+  },
   "scripts": {
     "start": "tsup --watch",
     "build": "tsup --minify",
