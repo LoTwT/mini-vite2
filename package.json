@@ -10,7 +10,8 @@
     "start": "tsup --watch",
     "build": "tsup --minify",
     "lint": "prettier -c .",
-    "prettier": "prettier --write ."
+    "prettier": "prettier --write .",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "",
@@ -36,7 +37,14 @@
     "@types/fs-extra": "^9.0.13",
     "@types/resolve": "^1.20.2",
     "@types/ws": "^8.5.3",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.2",
     "prettier": "^2.7.1",
     "tsup": "^6.1.2"
+  },
+  "lint-staged": {
+    "*.{js,ts,json,md,yml,yaml}": [
+      "prettier --write"
+    ]
   }
 }
