@@ -7,6 +7,7 @@ import { optimize } from "../optimizer"
 import { Plugin } from "../plugin"
 import { resolvePlugins } from "../plugins"
 import { createPluginContainer, PluginContainer } from "../pluginContainer"
+import { indexHtmlMiddleware } from "./middlewares/indexHtml"
 
 export interface ServerContext {
   root: string
@@ -35,6 +36,9 @@ export async function startDevServer() {
       await plugin.configureServer(serverContext)
     }
   }
+
+  // 处理入口 HTML 资源
+  app.use(indexHtmlMiddleware(serverContext))
 
   app.listen(3000, async () => {
     await optimize(root)
