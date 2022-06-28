@@ -45,13 +45,14 @@ export function preBundlePlugin(deps: Set<string>): Plugin {
       build.onLoad(
         {
           filter: /.*/,
+          namespace: "dep",
         },
         async (loadInfo) => {
           await init
           const id = loadInfo.path
           const root = process.cwd()
           const entryPath = resolve.sync(id, { basedir: root })
-          const code = await fs.readFileSync(entryPath, "utf-8")
+          const code = await fs.readFile(entryPath, "utf-8")
           const [imports, exports] = await parse(code)
           let proxyModule = []
 
@@ -67,26 +68,23 @@ export function preBundlePlugin(deps: Set<string>): Plugin {
           // cjs
           if (!imports.length && !exports.length) {
             // 构造代理模块
-            // 通过 require 拿到模块的导出对象
             const res = require(entryPath)
-            // 用 Object.keys 拿到所有的具名导出
             const specifiers = Object.keys(res)
-            // 构造 export 语句交给 Esbuild 打包
+
             proxyModule.push(
-              `export { ${specifiers.join(",")} } from "${relativePath}"`,
-              `export default require("${relativePath}")`,
+              `export { ${specifiers.join(",")} } from "${relativePath}";`,
+              `export default require("${relativePath}");`,
             )
           } else {
-            // esm ，export * 或者 export default 即可
+            // esm 格式比较好处理，export * 或者 export default 即可
             if (exports.includes("default")) {
               proxyModule.push(
-                `import d from "${relativePath}";export default d`,
+                `import d from "${relativePath}";export default d;`,
               )
             }
-            proxyModule.push(`export * from "${relativePath}"`)
+            proxyModule.push(`export * from "${relativePath}";`)
           }
-
-          debug("代理模块内容：%o", proxyModule.join("\n"))
+          debug("代理模块内容: %o", proxyModule.join("\n"))
           const loader = path.extname(entryPath).slice(1)
 
           return {
