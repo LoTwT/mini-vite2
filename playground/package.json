@@ -3,7 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "mini-vite"
+    "build:mini-vite": "cd .. && pnpm build",
+    "dev": "pnpm build:mini-vite && mini-vite"
   },
   "dependencies": {
     "react": "17",
