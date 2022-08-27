@@ -4,9 +4,13 @@
   "description": "mini-vite2",
   "main": "index.js",
   "packageManager": "pnpm@7.9.5",
+  "bin": {
+    "mini-vite": "bin/mini-vite"
+  },
   "scripts": {
     "start": "tsup --watch",
     "build": "tsup --minify",
+    "play": "pnpm run build && pnpm -C playground run dev",
     "prepare": "simple-git-hooks",
     "prettier": "prettier --write .",
     "up": "taze latest -I"
