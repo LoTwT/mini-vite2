@@ -18,6 +18,6 @@ export const EXTERNAL_TYPES = [
   "ico",
   "webp",
   "avif",
-];
+]
 
-export const BARE_IMPORT_RE = /^[\w@][^:]/;
+export const BARE_IMPORT_RE = /^[\w@][^:]/

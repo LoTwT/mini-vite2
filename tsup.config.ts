@@ -1,4 +1,4 @@
-import { defineConfig } from "tsup";
+import { defineConfig } from "tsup"
 
 export default defineConfig({
   // 后续会增加 entry
@@ -13,4 +13,4 @@ export default defineConfig({
   sourcemap: true,
   // 没有拆包的需求，关闭拆包能力
   splitting: false,
-});
+})

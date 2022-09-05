@@ -1,5 +1,5 @@
-import { Plugin } from "esbuild";
-import { BARE_IMPORT_RE, EXTERNAL_TYPES } from "../constants";
+import { Plugin } from "esbuild"
+import { BARE_IMPORT_RE, EXTERNAL_TYPES } from "../constants"
 
 export function scanPlugin(deps: Set<string>): Plugin {
   return {
@@ -13,9 +13,9 @@ export function scanPlugin(deps: Set<string>): Plugin {
             path: resolveInfo.path,
             // 打上 external 标记
             external: true,
-          };
-        }
-      );
+          }
+        },
+      )
 
       // 记录依赖
       build.onResolve(
@@ -23,17 +23,17 @@ export function scanPlugin(deps: Set<string>): Plugin {
           filter: BARE_IMPORT_RE,
         },
         (resolveInfo) => {
-          const { path: id } = resolveInfo;
+          const { path: id } = resolveInfo
 
           // 推入 deps 集合中
-          deps.add(id);
+          deps.add(id)
 
           return {
             path: id,
             external: true,
-          };
-        }
-      );
+          }
+        },
+      )
     },
-  };
+  }
 }
