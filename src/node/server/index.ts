@@ -3,6 +3,7 @@
 import connect from "connect";
 // picocolors 是一个用来在命令行显示不同颜色文本的工具
 import { blue, green } from "picocolors";
+import { optimize } from "../optimizer";
 
 export async function startDevServer() {
   const app = connect();
@@ -10,7 +11,10 @@ export async function startDevServer() {
   const startTime = Date.now();
 
   app.listen(3000, async () => {
+    await optimize(root);
+
     console.log(
+      "\n",
       green("🚀 No-Bundle 服务已经成功启动！"),
       `耗时：${Date.now() - startTime}ms`
     );
