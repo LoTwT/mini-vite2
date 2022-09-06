@@ -28,7 +28,7 @@
     "chokidar": "^3.5.3",
     "connect": "^3.7.0",
     "debug": "^4.3.4",
-    "es-module-lexer": "^1.0.3",
+    "es-module-lexer": "0.10.5",
     "esbuild": "^0.15.7",
     "fs-extra": "^10.1.0",
     "magic-string": "^0.26.3",
