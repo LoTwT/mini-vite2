@@ -7,6 +7,7 @@ import { optimize } from "../optimizer"
 import { resolvePlugins } from "../plugins"
 import { createPluginContainer, PluginContainer } from "../pluginContainer"
 import { Plugin } from "../plugin"
+import { indexHtmlMiddleware } from "./middlewares/indexHtml"
 
 export async function startDevServer() {
   const app = connect()
@@ -26,6 +27,9 @@ export async function startDevServer() {
   for (const plugin of plugins) {
     if (plugin.configureServer) await plugin.configureServer(serverContext)
   }
+
+  // 处理入口 HTML 资源
+  app.use(indexHtmlMiddleware(serverContext))
 
   app.listen(3000, async () => {
     await optimize(root)
