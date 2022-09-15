@@ -8,6 +8,7 @@ import { resolvePlugins } from "../plugins"
 import { createPluginContainer, PluginContainer } from "../pluginContainer"
 import { Plugin } from "../plugin"
 import { indexHtmlMiddleware } from "./middlewares/indexHtml"
+import { transformMiddleware } from "./middlewares/transform"
 
 export async function startDevServer() {
   const app = connect()
@@ -30,6 +31,8 @@ export async function startDevServer() {
 
   // 处理入口 HTML 资源
   app.use(indexHtmlMiddleware(serverContext))
+
+  app.use(transformMiddleware(serverContext))
 
   app.listen(3000, async () => {
     await optimize(root)
