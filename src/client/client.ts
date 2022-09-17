@@ -47,7 +47,7 @@ const hotModulesMap = new Map<string, HotModule>()
 // 不再生效的模块表
 const pruneMap = new Map<string, (data: any) => void | Promise<void>>()
 
-export const craeteHotContext = (ownerPath: string) => {
+export const createHotContext = (ownerPath: string) => {
   const mod = hotModulesMap.get(ownerPath)
 
   if (mod) mod.callbacks = []
