@@ -14,7 +14,8 @@
     "play": "pnpm run build && pnpm run playdev",
     "prepare": "simple-git-hooks",
     "prettier": "prettier --write .",
-    "up": "taze latest -I"
+    "up": "taze latest -I",
+    "test": "vitest"
   },
   "keywords": [],
   "author": "",
@@ -45,7 +46,9 @@
     "pnpm": "^7.11.0",
     "prettier": "^2.7.1",
     "simple-git-hooks": "^2.8.0",
-    "taze": "^0.8.0"
+    "taze": "^0.8.0",
+    "unplugin-auto-import": "^0.11.2",
+    "vitest": "^0.23.2"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm exec lint-staged"
