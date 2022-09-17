@@ -1,5 +1,3 @@
-import { WebSocket } from "ws"
-
 console.log("[vite] connecting...")
 
 // 1. 创建客户端 WebSocket 实例
@@ -7,9 +5,9 @@ console.log("[vite] connecting...")
 const socket = new WebSocket(`ws://localhost:__HMR_PORT__`, "vite-hmr")
 
 // 2. 接收服务端的更新信息
-socket.addEventListener("message", async ({ data }) =>
-  handleMessage(JSON.parse(data)).catch(console.error),
-)
+socket.addEventListener("message", async ({ data }) => {
+  handleMessage(JSON.parse(data)).catch(console.error)
+})
 
 // 3. 根据不同的更新类型进行更新
 async function handleMessage(payload: any) {

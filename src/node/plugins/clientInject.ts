@@ -22,7 +22,7 @@ export function clientInjectPlugin(): Plugin {
     async load(id) {
       // 加载 HMR 客户端脚本
       if (id === CLIENT_PUBLIC_PATH) {
-        const readPath = path.join(
+        const realPath = path.join(
           serverContext.root,
           "node_modules",
           "mini-vite",
@@ -30,10 +30,9 @@ export function clientInjectPlugin(): Plugin {
           "client.mjs",
         )
 
-        const code = await fs.readFile(readPath, "utf-8")
+        const code = await fs.readFile(realPath, "utf-8")
 
         return {
-          // 替换占位符
           code: code.replace("__HMR_PORT__", JSON.stringify(HMR_PORT)),
         }
       }
