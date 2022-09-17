@@ -31,3 +31,52 @@ async function handleMessage(payload: any) {
       break
   }
 }
+
+interface HotModule {
+  id: string
+  callbacks: HotCallback[]
+}
+
+interface HotCallback {
+  deps: string[]
+  fn: (modules: object[]) => void
+}
+
+// HMR 模块表
+const hotModulesMap = new Map<string, HotModule>()
+// 不再生效的模块表
+const pruneMap = new Map<string, (data: any) => void | Promise<void>>()
+
+export const craeteHotContext = (ownerPath: string) => {
+  const mod = hotModulesMap.get(ownerPath)
+
+  if (mod) mod.callbacks = []
+
+  function acceptDeps(deps: string[], callback: any) {
+    const mod: HotModule = hotModulesMap.get(ownerPath) || {
+      id: ownerPath,
+      callbacks: [],
+    }
+
+    // callbacks 属性存放 accept 的依赖、依赖改动后对应的回调逻辑
+    mod.callbacks.push({
+      deps,
+      fn: callback,
+    })
+
+    hotModulesMap.set(ownerPath, mod)
+  }
+
+  return {
+    accept: (deps: any, callback?: any) => {
+      // 这里仅考虑接收自身模块更新的情况
+      // import.meta.hot.accept()
+      if (typeof deps === "function" || !deps)
+        acceptDeps([ownerPath], ([mod]: any) => deps && deps(mod))
+    },
+
+    // 模块不再生效的回调
+    // import.meta.hot.prune(() => {})
+    prune: (cb: (data: any) => void) => pruneMap.set(ownerPath, cb),
+  }
+}
