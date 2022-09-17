@@ -52,7 +52,7 @@ export function importAnalysisPlugin(): Plugin {
         const cleanedId = cleanUrl(resolved.id)
         const mod = moduleGraph.getModuleById(cleanedId)
 
-        return `/$${getShortName(resolved.id, serverContext.root)}`
+        return `/${getShortName(resolved.id, serverContext.root)}`
       }
 
       const { moduleGraph } = serverContext
