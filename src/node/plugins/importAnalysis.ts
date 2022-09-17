@@ -4,7 +4,7 @@ import {
   DEFAULT_EXTERSIONS,
   PRE_BUNDLE_DIR,
 } from "../constants"
-import { cleanUrl, isJSRequest } from "../utils"
+import { cleanUrl, getShortName, isJSRequest } from "../utils"
 
 // magic-string 用来作字符串编辑
 import MagicString from "magic-string"
@@ -34,6 +34,20 @@ export function importAnalysisPlugin(): Plugin {
       // 解析 import 语句
       const [imports] = parse(code)
       const ms = new MagicString(code)
+
+      const resolve = async (id: string, importer?: string) => {
+        const resolved = await serverContext.pluginContainer.resolveId(
+          id,
+          importer,
+        )
+
+        if (!resolved) return
+
+        const cleanedId = cleanUrl(resolved.id)
+        const mod = moduleGraph.getModuleById(cleanedId)
+
+        return `/$${getShortName(resolved.id, serverContext.root)}`
+      }
 
       const { moduleGraph } = serverContext
       const curMod = moduleGraph.getModuleById(id)!
@@ -65,10 +79,9 @@ export function importAnalysisPlugin(): Plugin {
           ms.overwrite(modStart, modEnd, bundlePath)
           importedModules.add(bundlePath)
         } else if (modSource.startsWith(".") || modSource.startsWith("/")) {
-          // 直接调用插件上下文的 resolve 方法，会自动经过路径解析插件的处理
-          const resolved = await this.resolve(modSource, id)
+          const resolved = await resolve(modSource, id)
           if (resolved) {
-            ms.overwrite(modStart, modEnd, resolved.id)
+            ms.overwrite(modStart, modEnd, resolved)
             importedModules.add(resolved)
           }
         }

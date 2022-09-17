@@ -18,8 +18,8 @@ export function indexHtmlMiddleware(
 
         // 通过执行插件的 transformIndexHtml 方法对 HTML 进行自定义修改
         for (const plugin of serverContext.plugins) {
-          if (plugin.transformFromHtml)
-            html = await plugin.transformFromHtml(html)
+          if (plugin.transformIndexHtml)
+            html = await plugin.transformIndexHtml(html)
         }
 
         res.statusCode = 200

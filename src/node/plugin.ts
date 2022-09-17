@@ -19,5 +19,5 @@ export interface Plugin {
     code: string,
     id: string,
   ) => MayBePromise<Nullable<SourceDescription>>
-  transformFromHtml?: (raw: string) => MayBePromise<string>
+  transformIndexHtml?: (raw: string) => MayBePromise<string>
 }

@@ -10,7 +10,8 @@
   "scripts": {
     "start": "tsup --watch",
     "build": "tsup --minify",
-    "play": "pnpm run build && pnpm -C playground run dev",
+    "playdev": "pnpm -C playground run dev",
+    "play": "pnpm run build && pnpm run playdev",
     "prepare": "simple-git-hooks",
     "prettier": "prettier --write .",
     "up": "taze latest -I"
