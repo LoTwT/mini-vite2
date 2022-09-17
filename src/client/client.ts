@@ -1,5 +1,12 @@
 console.log("[vite] connecting...")
 
+interface Update {
+  type: "js-update" | "css-update"
+  path: string
+  acceptedPath: string
+  timestamp: number
+}
+
 // 1. 创建客户端 WebSocket 实例
 // 其中的 __HMR_PORT__ 之后会被 no-bundle 服务编译成具体的端口号
 const socket = new WebSocket(`ws://localhost:__HMR_PORT__`, "vite-hmr")
@@ -24,7 +31,7 @@ async function handleMessage(payload: any) {
       // 进行具体的模块更新
       payload.updates.forEach((update: Update) => {
         if (update.type === "js-update") {
-          // todo
+          fetchUpdate(update)
         }
       })
 
