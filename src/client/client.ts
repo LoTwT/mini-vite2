@@ -80,3 +80,35 @@ export const craeteHotContext = (ownerPath: string) => {
     prune: (cb: (data: any) => void) => pruneMap.set(ownerPath, cb),
   }
 }
+
+async function fetchUpdate({ path, timestamp }: Update) {
+  const mod = hotModulesMap.get(path)
+  if (!mod) return
+
+  const moduleMap = new Map()
+  const modulesToUpdate = new Set<string>()
+  modulesToUpdate.add(path)
+
+  await Promise.all(
+    Array.from(modulesToUpdate).map(async (dep) => {
+      const [path, query] = dep.split("?")
+
+      try {
+        // 通过动态 import 拉取最新模块
+        const newMod = await import(
+          path + `?t=${timestamp}${query ? `&${query}` : ""}`
+        )
+        moduleMap.set(dep, newMod)
+      } catch (error) {}
+    }),
+  )
+
+  return () => {
+    // 拉取最新模块后执行更新回调
+    for (const { deps, fn } of mod.callbacks) {
+      fn(deps.map((dep: any) => moduleMap.get(dep)))
+    }
+
+    console.log(`[vite] hot updated: ${path}`)
+  }
+}
