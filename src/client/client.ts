@@ -112,3 +112,28 @@ async function fetchUpdate({ path, timestamp }: Update) {
     console.log(`[vite] hot updated: ${path}`)
   }
 }
+
+const sheetsMap = new Map()
+
+export function updateStyle(id: string, content: string) {
+  let style = sheetsMap.get(id)
+
+  if (!style) {
+    // 添加 style 标签
+    style = document.createElement("style")
+    style.setAttribute("type", "text/css")
+    style.innerHTML = content
+    document.head.appendChild(style)
+  } else {
+    // 更新 style 标签内容
+    style.innerHTML = content
+  }
+
+  sheetsMap.set(id, style)
+}
+
+export function removeStyle(id: string) {
+  const style = sheetsMap.get(id)
+  if (style) document.head.removeChild(style)
+  sheetsMap.delete(id)
+}
